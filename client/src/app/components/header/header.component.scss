@@ -1,0 +1,18 @@
+.header-blue {
+    background:linear-gradient(135deg, #172a74, #21a9af);
+    color: #f0f0f0;
+    background-color:#184e8e;
+    padding: 1% ;
+    font-family:'Source Sans Pro', sans-serif;
+  }
+  .nav-link{
+    border-radius: 10px;
+    color: #f0f0f0;
+  }
+  .nav-link:hover{
+    background-color:#f0f0f0;
+    color: #172a74;
+  }
+  .nav-link:focus-visible{
+    border-color: yellow;
+  }
