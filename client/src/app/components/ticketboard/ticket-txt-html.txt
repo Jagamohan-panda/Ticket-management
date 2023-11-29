@@ -11,9 +11,9 @@
         <div *ngIf="userRole == 'M'">
           <button class="btn button" (click)="openPopup()">New Ticket</button>
         </div>
-        <!-- <div *ngIf="userRole == 'D'">
+        <div *ngIf="userRole == 'D'">
           <button class="btn button" (click)="showMyTickets()">{{mytickets?'View All':'My Tickets'}}</button>
-        </div> -->
+        </div>
       </div>
     </div>
     <div class="row">
@@ -58,18 +58,17 @@
       <div class="col" id="3" *ngFor="let staus of status">
         <div
           class="card card-bg border"
+          (drop)="drop($event, staus)"
           (dragover)="allowDrop($event)"
         >
           <div class="card-header border-0 py-1 text-center">{{ staus }}</div>
-          <div class="card-body ticket-bg" id="3" >
+          <div class="card-body ticket-bg" id="3">
             <div
               draggable="true"
               *ngFor="let ticket of filterTicket(staus);let i =index"
               class="card-Body-Hover m-1 rounded-1 task border"
               (dragstart)="drag($event, ticket,i)"
               (click)="handleView(ticket)"
-              (drop)="drop($event, staus,ticket)"
-
             >
               <div class="my-1 fw-bold d-flex justify-content-between">
                 <span>{{ ticket.id }} {{ ticket.title }}</span>
@@ -110,7 +109,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 text-end"><span>Date : {{ticket.created_time|date
+                <div class="col-12 text-end"><span>Previous for testing -{{ticket.previous_ticket
                 }}</span></div>
               </div>
             </div>
@@ -251,7 +250,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">{{ticketFormEdit.get('title')?.value}}</h4>
+          <h4 class="modal-title">{{editForm?"Now Can Edit The Ticket":"View Only"}}</h4>
         </div>
         <div class="modal-body">
           <div class="container">
@@ -334,7 +333,7 @@
               <div class="form-group">
                 <label for="created_time">Created At :</label>
                 <span
-                >{{ticketFormEdit.get('created_time')?.value|date}}</span>
+                >{{ticketFormEdit.get('created_time')?.value}}</span>
               </div>
             </form>
           </div>
@@ -344,7 +343,6 @@
             type="button"
             class="btn button"
             (click)="handleEditSubmit()"
-            *ngIf="allowToEdit()"
           >
             {{editForm?'Submit':'Click To Edit'}}
           </button>

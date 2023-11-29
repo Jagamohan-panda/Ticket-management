@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component ,ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   CdkDragDrop,
@@ -21,9 +21,10 @@ export class TicketKanbanComponent {
   todo = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
 
   done = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
-
+  constructor(private cdr:ChangeDetectorRef ){}
   drop(event: CdkDragDrop<string[]>) {
     console.log('event--',event.container.data, event.previousIndex, event.currentIndex)
+    this.cdr.detectChanges()
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -34,6 +35,7 @@ export class TicketKanbanComponent {
         event.currentIndex,
       );
     }
+    
   }
 
 }
