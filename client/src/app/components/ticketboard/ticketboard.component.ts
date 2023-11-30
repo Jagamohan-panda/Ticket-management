@@ -128,22 +128,6 @@ export class TicketboardComponent {
     this.ticketsArray = [...Todo, ...InProgress, ...Done];
   }
 
-  // sortList(arr: any) {
-  //   const newArray = [];
-
-  //   let currentHead = arr.findIndex((ticket: any) => ticket.next === 0);
-
-  //   while (currentHead !== -1) {
-  //     const currentTicket = arr[currentHead];
-  //     newArray.push(currentTicket);
-
-  //     currentHead = arr.findIndex(
-  //       (ticket: any) => ticket.next === currentTicket.id
-  //     );
-  //   }
-  //   console.log(newArray, 'here');
-  //   return newArray;
-  // }
   sortList(arr: any) {
     const newArray: any[] = [];
     let currentHead = arr.findIndex((ticket: any) => ticket.next === 0);
@@ -219,11 +203,10 @@ export class TicketboardComponent {
     );
 
     if (selectedTicketIndex !== -1) {
-      if(ticket.status==this.selectedTicket.status){
-        console.log('same')
+      if (ticket.status == this.selectedTicket.status) {
+        console.log('same');
 
-        
-        if(selectedTicketIndex<droppedTicketIndex){
+        if (selectedTicketIndex < droppedTicketIndex) {
           if (selectedTicketIndex === 0) {
             console.log(111111);
             this.updatePriorityApiCall(
@@ -252,7 +235,7 @@ export class TicketboardComponent {
               () => this.handleSuccess(),
               (error) => this.handleError(error)
             );
-    
+
             this.updatePriorityApiCall(
               this.selectedTicket.id,
               { next: 0 },
@@ -277,11 +260,11 @@ export class TicketboardComponent {
             console.log(55555);
             this.updatePriorityApiCall(
               sameStatus[droppedTicketIndex].id,
-              { next: sameStatus[droppedTicketIndex-1].id },
+              { next: sameStatus[droppedTicketIndex - 1].id },
               () => this.handleSuccess(),
               (error) => this.handleError(error)
             );
-    
+
             this.updatePriorityApiCall(
               this.selectedTicket.id,
               { next: 9999999999 },
@@ -289,8 +272,7 @@ export class TicketboardComponent {
               (error) => this.handleError(error)
             );
           }
-
-        }else{
+        } else {
           if (selectedTicketIndex === 0) {
             console.log(111111);
             this.updatePriorityApiCall(
@@ -319,7 +301,7 @@ export class TicketboardComponent {
               () => this.handleSuccess(),
               (error) => this.handleError(error)
             );
-    
+
             this.updatePriorityApiCall(
               this.selectedTicket.id,
               { next: 0 },
@@ -344,11 +326,11 @@ export class TicketboardComponent {
             console.log(55555);
             this.updatePriorityApiCall(
               this.selectedTicket.id,
-              { next: this.selectedTicket.id},
+              { next: this.selectedTicket.id },
               () => this.handleSuccess(),
               (error) => this.handleError(error)
             );
-    
+
             // this.updatePriorityApiCall(
             //   sameStatus[droppedTicketIndex].id,
             //   { next: this.selectedTicket.id },
@@ -357,8 +339,7 @@ export class TicketboardComponent {
             // );
           }
         }
-
-      }else{
+      } else {
         if (selectedTicketIndex === 0) {
           console.log(111111);
           this.updatePriorityApiCall(
@@ -387,7 +368,7 @@ export class TicketboardComponent {
             () => this.handleSuccess(),
             (error) => this.handleError(error)
           );
-  
+
           this.updatePriorityApiCall(
             this.selectedTicket.id,
             { next: 0, status: newStatus },
@@ -416,10 +397,10 @@ export class TicketboardComponent {
             () => this.handleSuccess(),
             (error) => this.handleError(error)
           );
-  
+
           this.updatePriorityApiCall(
             sameStatus[droppedTicketIndex].id,
-            { next: sameStatus[droppedTicketIndex-1].id, status: newStatus },
+            { next: sameStatus[droppedTicketIndex - 1].id, status: newStatus },
             () => this.handleSuccess(),
             (error) => this.handleError(error)
           );
@@ -443,7 +424,10 @@ export class TicketboardComponent {
   }
 
   allowToEdit() {
-    if (this.logged_user == this.edit_ticket || this.userRole == 'M') {
+    if (
+      this.logged_user == this.edit_ticket?.assigned_to?.id ||
+      this.userRole == 'M'
+    ) {
       return true;
     }
     return false;
@@ -498,32 +482,29 @@ export class TicketboardComponent {
     this.editDisplayStyle = 'none';
     this.editForm = false;
   }
-  handleEditSubmit() {
-    if (this.editForm) {
-      console.log('submit', this.ticketFormEdit.value);
-      this.ticketService
-        .updateTicket(this.edit_ticket.id, this.ticketFormEdit.value)
-        .subscribe(
-          (res: any) => {
-            this.loading = false;
-            this.getProjectTickets();
-            this.closePopup();
-          },
-          (error: any) => {
-            this.loading = false;
-            console.error('Error fetching subjects:', error);
-          }
-        );
+  handleEditSubmit(): void {
+    this.loading = true;
+    if(this.editForm){
+      this.handleApiResponse(
+        this.ticketService.updateTicket(
+          this.edit_ticket.id,
+          this.ticketFormEdit.value
+        ),
+        () => {
+          // Success callback
+          console.log('Update successful');
+          this.loading = false;
+          this.getProjectTickets();
+          this.editFormPopupClose();
+        },
+        (error: any) => {
+          // Error callback
+          console.error('Error updating ticket:', error);
+          this.loading = false;
+        }
+      );
     }
-
-    if (
-      this.edit_ticket.assigned_to.id == this.logged_user ||
-      this.userRole == 'M'
-    ) {
-      this.editForm = true;
-    } else {
-      alert("You're not allowed to edit this ticket !");
-    }
+    this.editForm = true;
   }
 
   // showMyTickets() {

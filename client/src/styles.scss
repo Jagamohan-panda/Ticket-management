@@ -11,3 +11,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     transform: translate(-50%, -50%);
     z-index: 1000; 
   }
+
+  .button {
+    border-radius: 5px;
+    margin-right: 2px;
+    // color: #f0f0f0;
+    border: 1px solid transparent; 
+    transition: border-color 0.3s ease;
+  }
+  
+  .button:hover, .button:focus-visible, .button:focus-within, .button:active {
+    background-color: #f0f0f0 !important;
+    color: #172a74 !important;
+    border-color:#172a74 !important; 
+  }
